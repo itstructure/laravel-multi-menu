@@ -1,0 +1,24 @@
+{
+    "name": "itstructure/laravel-multi-menu",
+    "description": "Widget for rendering multilevel menu for Laravel-5 Framework",
+    "type": "library",
+    "keywords": ["Laravel", "menu", "widget"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Andrey Girnik",
+            "email": "girnikandrey@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {
+        "laravel/framework": "~5.1.12|~5.2.0|~5.3.0|~5.4.0|~5.5.0|~5.6.0",
+        "php": ">=7.1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Itstructure\\MultiMenu\\": "src"
+        }
+    }
+}
