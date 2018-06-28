@@ -4,7 +4,18 @@ Laravel MultiMenu widget
 1 Introduction
 ----------------------------
 
-**MultiMenu** -- package for the Laravel 5 framework.
+[![Latest Stable Version](https://poser.pugx.org/itstructure/laravel-multi-menu/v/stable)](https://packagist.org/packages/itstructure/laravel-multi-menu)
+[![Latest Unstable Version](https://poser.pugx.org/itstructure/laravel-multi-menu/v/unstable)](https://packagist.org/packages/itstructure/laravel-multi-menu)
+[![License](https://poser.pugx.org/itstructure/laravel-multi-menu/license)](https://packagist.org/packages/itstructure/laravel-multi-menu)
+[![Total Downloads](https://poser.pugx.org/itstructure/laravel-multi-menu/downloads)](https://packagist.org/packages/itstructure/laravel-multi-menu)
+[![Build Status](https://scrutinizer-ci.com/g/itstructure/laravel-multi-menu/badges/build.png?b=master)](https://scrutinizer-ci.com/g/itstructure/laravel-multi-menu/build-status/master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/itstructure/laravel-multi-menu/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/itstructure/laravel-multi-menu/?branch=master)
+
+This widget is to display a multi level menu. There can be nested submenus. Used for Laravel framework.
+
+The widget uses data from the **database**, in which there are, in addition to the primary keys, also the parent keys.
+
+Data from the **database** is taken from a model, which instance of **Illuminate\Database\Eloquent\Model**.
 
 2 Dependencies
 ----------------------------
@@ -19,12 +30,12 @@ Laravel MultiMenu widget
 
 Via composer:
 
-```composer require "itstructure/laravel-multi-menu": "^1.0.0"```
+```composer require "itstructure/laravel-multi-menu": "^1.0.1"```
 
 or in section **require** of composer.json file set the following:
 ```
 "require": {
-    "itstructure/laravel-multi-menu": "^1.0.0"
+    "itstructure/laravel-multi-menu": "^1.0.1"
 }
 ```
 and command ```composer install```, if you install laravel project extensions first,
@@ -52,23 +63,72 @@ Then run command:
 
 ```composer require itstructure/laravel-multi-menu:dev-master --prefer-source```
 
-### 3.3 Publish in application
+### 3.3 App config
+
+Add to application ```config/app.php``` file to section **providers**: ```Itstructure\MultiMenu\MultiMenuServiceProvider::class```
+
+### 3.4 Publish in application
 
 Run command:
 
-```php artisan vendor:publish --provider="itstructure\MultiMenu\MultiMenuServiceProvider"```
+```php artisan vendor:publish --provider="Itstructure\MultiMenu\MultiMenuServiceProvider"```
 
 ## 4 Usage
 
 ### 4.1 Usage in view template
 
-Base application config must be like in example below:
+To run widget in blade view template:
 
 ```blade
-{!! app('multiMenuWidget')->run($models) !!}
+{!! app('multiMenuWidget')->run($models, $additionData) !!}
 ```
 
-### 4.2 Database table structure example
+Here,
+
+**$models** - must be instance of ```Illuminate\Database\Eloquent\Collection```
+
+**$additionData** - addition cross cutting data for all nesting levels. Can be empty or not defined.
+
+Example of custom changed view ```item.blade```:
+```html
+<li><a href="/catalog/{!! $data->id !!}">{!! $data->title !!}</a></li>
+```
+
+### 4.2 Config simple
+
+File ```/config/multiMenu.php```:
+```php
+return [
+    'primaryKeyName' => 'id',
+    'parentKeyName' => 'parentId',
+    'mainTemplate' => 'main',
+    'itemTemplate' => 'item',
+];
+```
+
+### 4.3 Config for nesting levels
+
+File ```/config/multiMenu.php```:
+```php
+return [
+    'primaryKeyName' => 'id',
+    'parentKeyName' => 'parentId',
+    'mainTemplate' => [
+        'levels' => [
+            'main',
+            'main2'
+        ]
+    ],
+    'itemTemplate' => [
+        'levels' => [
+            'item',
+            'item2'
+        ]
+    ],
+];
+```
+
+### 4.4 Database table structure example
 
 ```Table "catalogs"```
 
@@ -87,6 +147,32 @@ Base application config must be like in example below:
 |  10 |   NULL   | catalog10| ... |
 | ... |    ...   |    ...   | ... |
 ```
+
+## 5 Prevention of collisions
+
+### 5.1 Before save model
+
+To prevent the entry of the wrong parent identifier (for example, the new number that is a child in a subordinate chain of nested records):
+
+Use ```checkNewParentId(Model $mainModel, int $newParentId... e.t.c)```
+
+Here are the required parameters:
+
+**$mainModel** - current model record, in which the parent id will be changed for new value.
+
+**$newParentId** - new parent id, which must be verified.
+
+### 5.2 After delete model
+
+To prevent breaks in the chain of subject submissions:
+
+Use ```afterDeleteMainModel(Model $mainModel... e.t.c)```
+
+Here is the required parameter:
+
+**$mainModel** - deleted model record.
+
+This function will rebuild the chain.
 
 License
 ----------------------------
