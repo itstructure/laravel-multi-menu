@@ -7,7 +7,9 @@ use Itstructure\MultiMenu\ViewComposers\MultiMenuComposer;
 
 /**
  * Class MultiMenuServiceProvider
+ *
  * @package Itstructure\MultiMenu
+ *
  * @author Andrey Girnik <girnikandrey@gmail.com>
  */
 class MultiMenuServiceProvider extends ServiceProvider
@@ -22,7 +24,7 @@ class MultiMenuServiceProvider extends ServiceProvider
 
     public function register()
     {
-        $this->app->singleton('multiMenuWidget', function(){
+        $this->app->singleton('multiMenuWidget', function() {
             return new \Itstructure\MultiMenu\MultiMenuWidget();
         });
 
@@ -56,6 +58,7 @@ class MultiMenuServiceProvider extends ServiceProvider
 
     /**
      * @param $path
+     *
      * @return string
      */
     private function packagePath($path): string

@@ -1,5 +1,8 @@
 ### CHANGE LOG:
 
+**1.0.2 August 13, 2018:**
+- Code fixes according with the PSR standards.
+
 **1.0.1 June 28, 2018:**
 - Fixes for README.
 - Add badges:

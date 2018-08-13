@@ -30,12 +30,12 @@ Data from the **database** is taken from a model, which instance of **Illuminate
 
 Via composer:
 
-```composer require "itstructure/laravel-multi-menu": "^1.0.1"```
+```composer require "itstructure/laravel-multi-menu": "^1.0.2"```
 
 or in section **require** of composer.json file set the following:
 ```
 "require": {
-    "itstructure/laravel-multi-menu": "^1.0.1"
+    "itstructure/laravel-multi-menu": "^1.0.2"
 }
 ```
 and command ```composer install```, if you install laravel project extensions first,
@@ -50,7 +50,10 @@ In application ```composer.json``` file set the repository, like in example:
 "repositories": [
     {
         "type": "path",
-        "url": "../laravel-multi-menu"
+        "url": "../laravel-multi-menu",
+        "options": {
+            "symlink": true
+        }
     }
 ],
 ```
