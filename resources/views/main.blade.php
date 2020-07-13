@@ -1,1 +1,1 @@
-<ul>{!! $items !!}</ul>
+<ul>{!! $items !!}</ul> {{--Change it--}}

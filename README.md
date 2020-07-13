@@ -1,8 +1,6 @@
-Laravel MultiMenu widget
-==============
+# Laravel MultiMenu widget
 
-1 Introduction
-----------------------------
+## 1 Introduction
 
 [![Latest Stable Version](https://poser.pugx.org/itstructure/laravel-multi-menu/v/stable)](https://packagist.org/packages/itstructure/laravel-multi-menu)
 [![Latest Unstable Version](https://poser.pugx.org/itstructure/laravel-multi-menu/v/unstable)](https://packagist.org/packages/itstructure/laravel-multi-menu)
@@ -11,42 +9,33 @@ Laravel MultiMenu widget
 [![Build Status](https://scrutinizer-ci.com/g/itstructure/laravel-multi-menu/badges/build.png?b=master)](https://scrutinizer-ci.com/g/itstructure/laravel-multi-menu/build-status/master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/itstructure/laravel-multi-menu/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/itstructure/laravel-multi-menu/?branch=master)
 
-This widget is to display a multi level menu. There can be nested submenus. Used for Laravel framework.
+This widget is to display a multi level menu. There can be nested sub-menus. Used for Laravel framework.
 
 The widget uses data from the **database**, in which there are, in addition to the primary keys, also the parent keys.
 
-Data from the **database** is taken from a model, which instance of **Illuminate\Database\Eloquent\Model**.
+Data from the **database** is taken from a model and must be instance of **Illuminate\Database\Eloquent\Collection**.
 
-2 Dependencies
-----------------------------
+![Multi level menu example scheme](https://github.com/itstructure/laravel-multi-menu/blob/master/ML_menu_en.jpg)
 
-- php >= 7.1
+## 2 Dependencies
+
+- laravel 5.5+ | 6+ | 7+
+- php >= 7.1.0
 - composer
 
-3 Installation
-----------------------------
+## 3 Installation
 
 ### 3.1 General from remote repository
 
 Via composer:
 
-```composer require "itstructure/laravel-multi-menu": "^1.0.2"```
-
-or in section **require** of composer.json file set the following:
-```
-"require": {
-    "itstructure/laravel-multi-menu": "^1.0.2"
-}
-```
-and command ```composer install```, if you install laravel project extensions first,
-
-or command ```composer update```, if all laravel project extensions are already installed.
+`composer require itstructure/laravel-multi-menu "~2.0.0"`
 
 ### 3.2 If you are testing this package from local server directory
 
-In application ```composer.json``` file set the repository, like in example:
+In application `composer.json` file set the repository, like in example:
 
-```
+```json
 "repositories": [
     {
         "type": "path",
@@ -60,96 +49,160 @@ In application ```composer.json``` file set the repository, like in example:
 
 Here,
 
-**laravel-multi-menu** - directory name, which hase the same directory level like application and contains multi menu package.
+**../laravel-multi-menu** - directory name, which has the same directory level as application and contains multi menu package.
 
 Then run command:
 
-```composer require itstructure/laravel-multi-menu:dev-master --prefer-source```
+`composer require itstructure/laravel-multi-menu:dev-master --prefer-source`
 
 ### 3.3 App config
 
-Add to application ```config/app.php``` file to section **providers**: ```Itstructure\MultiMenu\MultiMenuServiceProvider::class```
+Add to application `config/app.php` file to section **providers**:
+
+`Itstructure\MultiMenu\MultiMenuServiceProvider::class`
 
 ### 3.4 Publish in application
 
-Run command:
+- To publish all parts run command:
+    
+    `php artisan multimenu:publish`
 
-```php artisan vendor:publish --provider="Itstructure\MultiMenu\MultiMenuServiceProvider"```
+- To publish only config run command:
+
+    `php artisan multimenu:publish --only=config`
+    
+    It stores `multimenu.php` config file to `config` folder.
+        
+- To publish only views run command:
+            
+    `php artisan multimenu:publish --only=views`
+    
+    It stores view files to `resources/views/vendor/multimenu` folder.
+
+- Else you can use `--force` argument to rewrite already published files.
+
+Or another variant:
+
+`php artisan vendor:publish --provider="Itstructure\MultiMenu\MultiMenuServiceProvider"`
 
 ## 4 Usage
 
-### 4.1 Usage in view template
+### 4.1 Simple variant
 
-To run widget in blade view template:
+#### Config part
 
-```blade
-{!! app('multiMenuWidget')->run($models, $additionData) !!}
-```
-
-Here,
-
-**$models** - must be instance of ```Illuminate\Database\Eloquent\Collection```
-
-**$additionData** - addition cross cutting data for all nesting levels. Can be empty or not defined.
-
-Example of custom changed view ```item.blade```:
-```html
-<li><a href="/catalog/{!! $data->id !!}">{!! $data->title !!}</a></li>
-```
-
-### 4.2 Config simple
-
-File ```/config/multiMenu.php```:
 ```php
 return [
-    'primaryKeyName' => 'id',
-    'parentKeyName' => 'parentId',
-    'mainTemplate' => 'main',
-    'itemTemplate' => 'item',
+    'primaryKeyName' => 'id', // Editable
+    'parentKeyName' => 'parent_id', // Editable
+    'mainTemplate' => 'main', // Editable
+    'itemTemplate' => 'item', // Editable
 ];
 ```
 
-### 4.3 Config for nesting levels
+#### View template part
 
-File ```/config/multiMenu.php```:
+```php
+@php
+$multiOptions = [ // Editable
+    'config' => config('multimenu'),
+    'data' => $pages
+];
+@endphp
+```
+
+```php
+@multiMenu($multiOptions)
+```
+    
+Here, `$pages` - is from controller part, for example `$pages = Page::all();`. Must be instance of `Illuminate\Database\Eloquent\Collection`.
+
+### 4.2 Addition config options and data
+
+#### Config part
+
+There is an example to set item blade templates for 3 levels:
+
 ```php
 return [
     'primaryKeyName' => 'id',
-    'parentKeyName' => 'parentId',
-    'mainTemplate' => [
-        'levels' => [
-            'main',
-            'main2'
-        ]
-    ],
+    'parentKeyName' => 'parent_id',
+    'mainTemplate' => 'main',
     'itemTemplate' => [
         'levels' => [
             'item',
-            'item2'
+            'item',
+            'item_new',
         ]
     ],
 ];
 ```
 
-### 4.4 Database table structure example
+You can set `mainTemplate` by analogy.
 
-```Table "catalogs"```
+#### Blade templates
+
+Example of a custom changed blade template file `item.blade`:
 
 ```php
-| id  | parentId |   title  | ... |
-|-----|----------|----------|-----|
-|  1  |   NULL   | catalog1 | ... |
-|  2  |   NULL   | catalog2 | ... |
-|  3  |     1    | catalog3 | ... |
-|  4  |     1    | catalog4 | ... |
-|  5  |     4    | catalog5 | ... |
-|  6  |     4    | catalog6 | ... |
-|  7  |     3    | catalog7 | ... |
-|  8  |     3    | catalog8 | ... |
-|  9  |   NULL   | catalog9 | ... |
-|  10 |   NULL   | catalog10| ... |
-| ... |    ...   |    ...   | ... |
+<li>
+    <a href="{{ $data->icon }}">
+        Initial item Id {{ $data->id }} {{ isset($addition) ? ' | ' . $addition : '' }}
+    </a>
+</li>
 ```
+
+Example of a custom changed blade template file `item_new.blade`:
+
+```php
+<li>
+    <a href="{{ $data->icon }}" style="color: green; font-weight: bold;">
+        New item Id {{ $data->id }} {{ isset($addition) ? ' | ' . $addition : '' }}
+    </a>
+</li>
+```
+
+#### Addition data
+
+Example in a template file:
+
+```php
+@php
+$multiOptions = [
+    'config' => config('multimenu'),
+    'data' => $pages,
+    'additionData' => [
+        'levels' => [
+            0 => [],
+            1 => ['addition' => 'addition string']
+        ]
+    ]
+];
+@endphp
+```
+
+```php
+@multiMenu($multiOptions)
+```
+
+### 4.3 Database table structure example
+
+`Table "catalogs"`
+
+    | id  | parent_id |   title    | ... |
+    |-----|-----------|------------|-----|
+    |  1  |   NULL    |   item 1   | ... |
+    |  2  |   NULL    |   item 2   | ... |
+    |  3  |   NULL    |   item 3   | ... |
+    |  4  |   NULL    |   item 4   | ... |
+    |  5  |   NULL    |   item 5   | ... |
+    |  6  |     2     |  item 2.1  | ... |
+    |  7  |     2     |  item 2.2  | ... |
+    |  8  |     7     | item 2.2.1 | ... |
+    |  9  |     7     | item 2.2.2 | ... |
+    |  10 |     7     | item 2.2.3 | ... |
+    | ... |    ...    |     ...    | ... |
+
 
 ## 5 Prevention of collisions
 
@@ -157,7 +210,7 @@ return [
 
 To prevent the entry of the wrong parent identifier (for example, the new number that is a child in a subordinate chain of nested records):
 
-Use ```checkNewParentId(Model $mainModel, int $newParentId... e.t.c)```
+Use static method `checkNewParentId(Model $mainModel, int $newParentId... e.t.c)`
 
 Here are the required parameters:
 
@@ -169,7 +222,7 @@ Here are the required parameters:
 
 To prevent breaks in the chain of subject submissions:
 
-Use ```afterDeleteMainModel(Model $mainModel... e.t.c)```
+Use static method `afterDeleteMainModel(Model $mainModel... e.t.c)`
 
 Here is the required parameter:
 
@@ -177,9 +230,8 @@ Here is the required parameter:
 
 This function will rebuild the chain.
 
-License
-----------------------------
+## License
 
-Copyright © 2018 Andrey Girnik girnikandrey@gmail.com.
+Copyright © 2018-2020 Andrey Girnik girnikandrey@gmail.com.
 
 Licensed under the [MIT license](http://opensource.org/licenses/MIT). See LICENSE.txt for details.

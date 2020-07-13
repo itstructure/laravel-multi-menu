@@ -1,1 +1,3 @@
-<li>{!! $data->id !!} need to be changed</li>
+<li>
+    Item Id {!! $data->id !!} {{--Change it--}}
+</li>

@@ -2,9 +2,8 @@
 
 namespace Itstructure\MultiMenu;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Collection;
-use Itstructure\MultiMenu\exceptions\InvalidConfigException;
+use Exception;
+use Illuminate\Database\Eloquent\{Model, Collection};
 
 /**
  * Class MultiMenuWidget
@@ -17,53 +16,47 @@ class MultiMenuWidget {
 
     /**
      * Primary key name.
-     *
      * @var string
      */
     private $primaryKeyName = 'id';
 
     /**
      * Relation key name.
-     *
      * @var string
      */
-    private $parentKeyName = 'parentId';
+    private $parentKeyName = 'parent_id';
 
     /**
      * Main container template to display widget elements.
-     *
      * @var string|array
      */
     private $mainTemplate = 'main';
 
     /**
      * Item container template to display widget elements.
-     *
      * @var string|array
      */
     private $itemTemplate = 'item';
 
     /**
      * Addition cross cutting data.
-     *
      * @var array
      */
     private $additionData = [];
 
     /**
      * MultiMenuWidget constructor.
+     * @param array $config
      */
-    public function __construct()
+    public function __construct(array $config)
     {
-        $this->setAttributes(config('multiMenu'));
+        $this->setAttributes($config);
     }
 
     /**
      * Starts the output widget of the multi level view records according with the menu type.
-     *
      * @param Collection $data
      * @param array $additionData
-     *
      * @return string
      */
     public function run(Collection $data, array $additionData = []): string
@@ -75,20 +68,21 @@ class MultiMenuWidget {
 
     /**
      * Check whether a particular record can be used as a parent.
-     *
      * @param Model $mainModel
      * @param int $newParentId
-     * @param string $primaryKeyName
-     * @param string $parentKeyName
-     *
+     * @param string|null $primaryKeyName
+     * @param string|null $parentKeyName
      * @return bool
      */
     public static function checkNewParentId(
         Model $mainModel,
         int $newParentId,
-        string $primaryKeyName = 'id',
-        string $parentKeyName = 'parentId'
+        string $primaryKeyName = null,
+        string $parentKeyName = null
     ): bool {
+
+        $primaryKeyName = empty($primaryKeyName) ? config('multimenu.primaryKeyName', 'id') : $primaryKeyName;
+        $parentKeyName = empty($parentKeyName) ? config('multimenu.parentKeyName', 'parent_id') : $parentKeyName;
 
         $parentRecord = $mainModel::where($primaryKeyName, $newParentId)
             ->select($primaryKeyName, $parentKeyName)
@@ -102,23 +96,23 @@ class MultiMenuWidget {
             return true;
         }
 
-        return static::checkNewParentId($mainModel, $parentRecord->{$parentKeyName});
+        return static::checkNewParentId($mainModel, $parentRecord->{$parentKeyName}, $primaryKeyName, $parentKeyName);
     }
 
     /**
      * Reassigning child objects to their new parent after delete the main model record.
-     *
      * @param Model $mainModel
-     * @param string $primaryKeyName
-     * @param string $parentKeyName
-     *
-     * @return void
+     * @param string|null $primaryKeyName
+     * @param string|null $parentKeyName
      */
     public static function afterDeleteMainModel(
         Model $mainModel,
-        string $primaryKeyName = 'id',
-        string $parentKeyName = 'parentId'
+        string $primaryKeyName = null,
+        string $parentKeyName = null
     ): void {
+
+        $primaryKeyName = empty($primaryKeyName) ? config('multimenu.primaryKeyName', 'id') : $primaryKeyName;
+        $parentKeyName = empty($parentKeyName) ? config('multimenu.parentKeyName', 'parent_id') : $parentKeyName;
 
         $mainModel::where($parentKeyName, $mainModel->{$primaryKeyName})
             ->update([
@@ -128,7 +122,6 @@ class MultiMenuWidget {
 
     /**
      * @param array $config
-     *
      * @return void
      */
     private function setAttributes(array $config): void
@@ -140,21 +133,18 @@ class MultiMenuWidget {
 
     /**
      * Group records in to sub levels according with the relation to parent records.
-     *
      * @param Collection $models
-     *
      * @return array
-     *
-     * @throws InvalidConfigException
+     * @throws Exception
      */
     private function groupLevels(Collection $models): array
     {
         if (!is_string($this->parentKeyName) || empty($this->primaryKeyName)) {
-            throw new InvalidConfigException('The parent key name is nod defined correctly.');
+            throw new Exception('The parent key name is nod defined correctly.');
         }
 
         if (!is_string($this->primaryKeyName) || empty($this->primaryKeyName)) {
-            throw new InvalidConfigException('The primary key name is nod defined correctly.');
+            throw new Exception('The primary key name is nod defined correctly.');
         }
 
         if ($models->count() == 0) {
@@ -179,10 +169,8 @@ class MultiMenuWidget {
 
     /**
      * Base render.
-     *
      * @param array $items
      * @param int $level
-     *
      * @return string
      */
     private function renderItems(array $items, int $level = 0): string
@@ -196,7 +184,7 @@ class MultiMenuWidget {
         /** @var array $item */
         foreach ($items as $item) {
 
-            $itemsContent .= view('multiMenuWidget::'.$this->levelAttributeValue($this->itemTemplate, $level),
+            $itemsContent .= view('multimenu::'.$this->levelAttributeValue($this->itemTemplate, $level),
                 array_merge([
                     'data' => $item['data']
                 ], $this->levelAttributeValue($this->additionData, $level))
@@ -207,7 +195,7 @@ class MultiMenuWidget {
             }
         }
 
-        return view('multiMenuWidget::'.$this->levelAttributeValue($this->mainTemplate, $level), array_merge([
+        return view('multimenu::'.$this->levelAttributeValue($this->mainTemplate, $level), array_merge([
                 'items' => $itemsContent,
                 'level' => $level
             ], $this->levelAttributeValue($this->additionData, $level))
@@ -216,13 +204,10 @@ class MultiMenuWidget {
 
     /**
      * Get attribute values in current level.
-     *
-     * @param string|array $attributeValue
+     * @param $attributeValue
      * @param int $level
-     *
-     * @throws InvalidConfigException
-     *
      * @return mixed
+     * @throws Exception
      */
     private function levelAttributeValue($attributeValue, int $level)
     {
@@ -239,13 +224,18 @@ class MultiMenuWidget {
             $countLevels = count($attributeValue['levels']);
 
             if ($countLevels == 0) {
-                throw new InvalidConfigException('Level values are not defined for attribute.');
+                throw new Exception('Level values are not defined for attribute.');
             }
 
-            return isset($attributeValue['levels'][$level]) ?
-                $attributeValue['levels'][$level] : $attributeValue['levels'][($countLevels-1)];
+            if (isset($attributeValue['levels'][$level])) {
+                return $attributeValue['levels'][$level];
+
+            } else {
+                $levelKeys = array_keys($attributeValue['levels']);
+                return $attributeValue['levels'][$levelKeys[$countLevels-1]];
+            }
         }
 
-        throw new InvalidConfigException('Attribute is not defined correctly.');
+        throw new Exception('Attribute is not defined correctly.');
     }
 }
