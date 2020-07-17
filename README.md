@@ -17,7 +17,7 @@ Data from the **database** is taken from a model and must be instance of **Illum
 
 ![Multi level menu example scheme](https://github.com/itstructure/laravel-multi-menu/blob/master/ML_menu_en.jpg)
 
-## 2 Dependencies
+## 2 Requirements
 
 - laravel 5.5+ | 6+ | 7+
 - php >= 7.1.0
@@ -29,7 +29,7 @@ Data from the **database** is taken from a model and must be instance of **Illum
 
 Via composer:
 
-`composer require itstructure/laravel-multi-menu "~2.0.0"`
+`composer require itstructure/laravel-multi-menu "~2.0.1"`
 
 ### 3.2 If you are testing this package from local server directory
 

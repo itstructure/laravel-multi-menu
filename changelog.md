@@ -1,5 +1,8 @@
 ### CHANGE LOG:
 
+**2.0.1 July 17, 2020:**
+- Simple readme fix for `Requirements`.
+
 **2.0.0 July 14, 2020:**
 - Total package reconstruction.
 
