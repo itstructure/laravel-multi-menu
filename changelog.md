@@ -1,5 +1,8 @@
 ### CHANGE LOG:
 
+**2.0.2 September 10, 2020:**
+- Add compatibility for Laravel 8.
+
 **2.0.1 July 17, 2020:**
 - Simple readme fix for `Requirements`.
 

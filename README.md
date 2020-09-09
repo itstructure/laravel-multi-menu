@@ -19,7 +19,7 @@ Data from the **database** is taken from a model and must be instance of **Illum
 
 ## 2 Requirements
 
-- laravel 5.5+ | 6+ | 7+
+- laravel 5.5+ | 6+ | 7+ | 8+
 - php >= 7.1.0
 - composer
 
@@ -29,7 +29,7 @@ Data from the **database** is taken from a model and must be instance of **Illum
 
 Via composer:
 
-`composer require itstructure/laravel-multi-menu "~2.0.1"`
+`composer require itstructure/laravel-multi-menu "~2.0.2"`
 
 ### 3.2 If you are testing this package from local server directory
 
