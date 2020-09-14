@@ -1,5 +1,8 @@
 ### CHANGE LOG:
 
+**2.0.3 September 15, 2020:**
+- Description fix.
+
 **2.0.2 September 10, 2020:**
 - Add compatibility for Laravel 8.
 

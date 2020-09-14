@@ -1,6 +1,6 @@
 {
     "name": "itstructure/laravel-multi-menu",
-    "description": "Widget for rendering multilevel menu for Laravel-5 Framework",
+    "description": "Widget for rendering multilevel menu for Laravel framework",
     "type": "library",
     "keywords": ["Laravel", "menu", "widget"],
     "license": "MIT",
