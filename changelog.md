@@ -1,5 +1,8 @@
 ### CHANGE LOG:
 
+**2.0.4 February 23, 2021:**
+- Upgrade copyright year.
+
 **2.0.3 September 15, 2020:**
 - Description fix.
 

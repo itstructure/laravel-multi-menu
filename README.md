@@ -29,7 +29,7 @@ Data from the **database** is taken from a model and must be instance of **Illum
 
 Via composer:
 
-`composer require itstructure/laravel-multi-menu "~2.0.2"`
+`composer require itstructure/laravel-multi-menu "~2.0.4"`
 
 ### 3.2 If you are testing this package from local server directory
 
@@ -232,6 +232,6 @@ This function will rebuild the chain.
 
 ## License
 
-Copyright © 2018-2020 Andrey Girnik girnikandrey@gmail.com.
+Copyright © 2018-2021 Andrey Girnik girnikandrey@gmail.com.
 
 Licensed under the [MIT license](http://opensource.org/licenses/MIT). See LICENSE.txt for details.
