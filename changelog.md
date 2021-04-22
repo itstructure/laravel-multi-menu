@@ -1,5 +1,8 @@
 ### CHANGE LOG:
 
+**2.0.5 April 22, 2021:**
+- Add scrutinizer build option.
+
 **2.0.4 February 23, 2021:**
 - Upgrade copyright year.
 

@@ -29,7 +29,7 @@ Data from the **database** is taken from a model and must be instance of **Illum
 
 Via composer:
 
-`composer require itstructure/laravel-multi-menu "~2.0.4"`
+`composer require itstructure/laravel-multi-menu "~2.0.5"`
 
 ### 3.2 If you are testing this package from local server directory
 
