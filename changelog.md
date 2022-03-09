@@ -1,5 +1,8 @@
 ### CHANGE LOG:
 
+**2.0.6 March 6, 2022:**
+- Update descriptions.
+
 **2.0.5 April 22, 2021:**
 - Add scrutinizer build option.
 
