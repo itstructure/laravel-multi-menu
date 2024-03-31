@@ -19,7 +19,7 @@ Data from the **database** is taken from a model and must be instance of **Illum
 
 ## 2 Requirements
 
-- laravel 5.5+ | 6+ | 7+ | 8+ | 9+
+- laravel 5.5+ | 6+ | 7+ | 8+ | 9+ | 10+ | 11+
 - php >= 7.1.0
 - composer
 
@@ -29,7 +29,7 @@ Data from the **database** is taken from a model and must be instance of **Illum
 
 Via composer:
 
-`composer require itstructure/laravel-multi-menu "~2.0.7"`
+`composer require itstructure/laravel-multi-menu "~2.0.8"`
 
 ### 3.2 If you are testing this package from local server directory
 
@@ -55,13 +55,7 @@ Then run command:
 
 `composer require itstructure/laravel-multi-menu:dev-master --prefer-source`
 
-### 3.3 App config
-
-Add to application `config/app.php` file to section **providers**:
-
-`Itstructure\MultiMenu\MultiMenuServiceProvider::class`
-
-### 3.4 Publish in application
+### 3.3 Publish in application
 
 - To publish all parts run command:
     
@@ -232,6 +226,6 @@ This function will rebuild the chain.
 
 ## License
 
-Copyright © 2018-2023 Andrey Girnik girnikandrey@gmail.com.
+Copyright © 2018-2024 Andrey Girnik girnikandrey@gmail.com.
 
 Licensed under the [MIT license](http://opensource.org/licenses/MIT). See LICENSE.txt for details.

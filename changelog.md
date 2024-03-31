@@ -1,5 +1,8 @@
 ### CHANGE LOG:
 
+**2.0.8 March 31, 2024:**
+- Add support for Laravel 10 and 11.
+
 **2.0.7 January 26, 2023:**
 - Upgrade copyright year.
 

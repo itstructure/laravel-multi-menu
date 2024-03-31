@@ -13,12 +13,19 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "laravel/framework": "~5.5.0|~5.6.0|~5.7.0|~5.8.0|^6.0|^7.0|^8.0|^9.0",
+        "laravel/framework": "~5.5.0|~5.6.0|~5.7.0|~5.8.0|^6.0|^7.0|^8.0|^9.0|^10.0|^11.0",
         "php": ">=7.1.0"
     },
     "autoload": {
         "psr-4": {
             "Itstructure\\MultiMenu\\": "src"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Itstructure\\MultiMenu\\MultiMenuServiceProvider"
+            ]
         }
     }
 }
